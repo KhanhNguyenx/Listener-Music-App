@@ -7,8 +7,6 @@ export const topics = async (req: Request, res: Response) => {
     deleted: false
   });
 
-  console.log(topics);
-
   res.render("client/pages/topics/index", {
     pageTitle: "Quản lý chủ đề",
     topics: topics,

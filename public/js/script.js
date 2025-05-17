@@ -1,6 +1,6 @@
 // Aplayer
 const aplayer = document.querySelector("#aplayer");
-if(aplayer) {
+if (aplayer) {
   const dataSong = JSON.parse(aplayer.getAttribute("data-song"));
   const dataSinger = JSON.parse(aplayer.getAttribute("data-singer"));
 
@@ -13,32 +13,62 @@ if(aplayer) {
         artist: dataSinger.fullName,
         url: dataSong.audio,
         cover: dataSong.avatar,
-        lrc: dataSong.lyrics
-      }
+        lrc: dataSong.lyrics,
+      },
     ],
-    autoplay: true
+    autoplay: true,
   });
 
   const avatar = document.querySelector(".singer-detail .inner-avatar");
 
-  ap.on('play', function () {
+  ap.on("play", function () {
     avatar.style.animationPlayState = "running";
   });
 
-  ap.on('pause', function () {
+  ap.on("pause", function () {
     avatar.style.animationPlayState = "paused";
   });
 
-  ap.on('ended', function () {
+  ap.on("ended", function () {
     fetch(`/songs/listen/${dataSong._id}`, {
-      method: "PATCH"
+      method: "PATCH",
     })
-      .then(res => res.json())
-      .then(data => {
-        if(data.code == "success") {
-          document.querySelector(".singer-detail .inner-listen span").innerHTML = data.listen;
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == "success") {
+          document.querySelector(
+            ".singer-detail .inner-listen span"
+          ).innerHTML = data.listen;
         }
-      })
+      });
   });
 }
 // End Aplayer
+
+//Like
+const likeBtn = document.querySelector("[button-like]");
+
+if (likeBtn) {
+  likeBtn.addEventListener("click", function () {
+    const idSong = likeBtn.getAttribute("button-like");
+    const isActive = likeBtn.classList.contains("active");
+
+    const typeLike = isActive ? "dislike" : "like";
+
+    const link = `/songs/like/${typeLike}/${idSong}`;
+
+    const options = {
+      method: "PATCH",
+    };
+    
+    fetch(link, options)
+      .then((res) => res.json())
+      .then((data) => {
+        const likeCount = likeBtn.querySelector("span");
+        likeCount.innerHTML = `${data.like}`;
+
+        likeBtn.classList.toggle("active");
+      });
+  });
+}
+//End Like

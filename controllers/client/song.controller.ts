@@ -72,3 +72,33 @@ export const detail = async (req: Request, res: Response) => {
     topic: topic
   });
 }
+// [GET] /songs/like/:typeLike/:idSong
+export const like = async (req: Request, res: Response) => {
+  const idSong = req.params.idSong;
+  const typeLike = req.params.typeLike;
+
+  const song = await Song.findOne({
+    _id: idSong,
+    deleted: false,
+    status: "active"
+  });
+
+  if (!song) {
+    return res.status(404).json({
+      message: "Bài hát không tồn tại"
+    });
+  }
+
+  const newLike = typeLike == "like" ? song.like + 1 : song.like - 1;
+
+  await Song.updateOne(
+    { _id: idSong },
+    { like: newLike }
+  );
+
+  res.json({
+    code: 200,
+    message: "Thích bài hát thành công",
+    like: newLike
+  });
+}
