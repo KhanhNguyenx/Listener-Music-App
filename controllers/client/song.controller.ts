@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Topic from "../../models/topic.model";
 import Singer from "../../models/singer.model";
 import Song from "../../models/song.model";
+import FavoriteSong from "../../models/favorite-song.model";
 
 
 // [GET] /songs/:slugTopic
@@ -54,16 +55,12 @@ export const detail = async (req: Request, res: Response) => {
     _id: song.topicId
   }).select("title");
 
-  // const existSongInFavorite = await FavoriteSong.findOne({
-  //   songId: song.id,
-  //   // user: res.locals.user.id
-  // });
+  const existSongInFavorite = await FavoriteSong.findOne({
+    songId: song.id,
+    // user: res.locals.user.id
+  });
 
-  // if(existSongInFavorite) {
-  //   song["favorite"] = true;
-  // } else {
-  //   song["favorite"] = false;
-  // }
+  song["isFavoriteSong"] = existSongInFavorite ? true : false;
 
   res.render("client/pages/songs/detail", {
     pageTitle: "Chi tiết bài hát",
@@ -72,7 +69,8 @@ export const detail = async (req: Request, res: Response) => {
     topic: topic
   });
 }
-// [GET] /songs/like/:typeLike/:idSong
+
+// [PATCH] /songs/like/:typeLike/:idSong
 export const like = async (req: Request, res: Response) => {
   const idSong = req.params.idSong;
   const typeLike = req.params.typeLike;
@@ -100,5 +98,39 @@ export const like = async (req: Request, res: Response) => {
     code: 200,
     message: "Thích bài hát thành công",
     like: newLike
+  });
+}
+// [PATCH] /songs/favorite/:typeFavorite/:idSong
+export const favorite = async (req: Request, res: Response) => {
+  const idSong: String = req.params.idSong;
+  const typeFavorite: String = req.params.typeFavorite;
+
+  switch (typeFavorite) {
+    case "favorite":
+      const existSongInFavorite = await FavoriteSong.findOne({
+        songId: idSong,
+        // user: res.locals.user.id
+      });
+      if (!existSongInFavorite) {
+        const record = new FavoriteSong({
+          songId: idSong,
+          user: ""
+        });
+        await record.save();
+      }
+      break;
+    case "unfavorite":
+      await FavoriteSong.deleteOne({
+        songId: idSong,
+        // user: res.locals.user.id
+      });
+      break;
+    default:
+      break;
+  }
+
+  res.json({
+    code: 200,
+    message: "Thích bài hát thành công",
   });
 }
