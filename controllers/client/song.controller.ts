@@ -16,7 +16,7 @@ export const list = async (req: Request, res: Response) => {
   }).select("title");
 
   const songs = await Song.find({
-    topicId: topic.id,
+    topicId: topic._id,
     deleted: false,
     status: "active"
   }).select("avatar title singerId like slug");
@@ -69,7 +69,6 @@ export const detail = async (req: Request, res: Response) => {
     topic: topic
   });
 }
-
 // [PATCH] /songs/like/:typeLike/:idSong
 export const like = async (req: Request, res: Response) => {
   const idSong = req.params.idSong;

@@ -76,28 +76,29 @@ if (likeBtn) {
 //End Like
 
 //Favorite
-const favoriteBtn = document.querySelector("[button-favorite]");
+const listFavoriteBtn = document.querySelectorAll("[button-favorite]");
+if (listFavoriteBtn.length > 0) {
+  listFavoriteBtn.forEach((favoriteBtn) => {
+    favoriteBtn.addEventListener("click", function () {
+      const idSong = favoriteBtn.getAttribute("button-favorite");
+      const isActive = favoriteBtn.classList.contains("active");
 
-if (favoriteBtn) {
-  favoriteBtn.addEventListener("click", function () {
-    const idSong = favoriteBtn.getAttribute("button-favorite");
-    const isActive = favoriteBtn.classList.contains("active");
+      const typeFavorite = isActive ? "unfavorite" : "favorite";
 
-    const typeFavorite = isActive ? "unfavorite" : "favorite";
+      const link = `/songs/favorite/${typeFavorite}/${idSong}`;
 
-    const link = `/songs/favorite/${typeFavorite}/${idSong}`;
+      const options = {
+        method: "PATCH",
+      };
 
-    const options = {
-      method: "PATCH",
-    };
-
-    fetch(link, options)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.code == 200) {
-          favoriteBtn.classList.toggle("active");
-        }
-      });
+      fetch(link, options)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.code == 200) {
+            favoriteBtn.classList.toggle("active");
+          }
+        });
+    });
   });
 }
 //End Favorite
