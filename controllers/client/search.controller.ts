@@ -5,6 +5,7 @@ import { convertToSlug } from "../../helpers/convertToSlug";
 
 //[GET] /search/result
 export const result = async (req: Request, res: Response) => {
+  const type = req.params.type;
   const keyword: string = `${req.query.keyword}`;
 
   let searchSongs = [];
@@ -18,22 +19,46 @@ export const result = async (req: Request, res: Response) => {
 
     const songs = await Song.find({
       $or: [
-        {title: regex},
-        {slug: stringSlugRegex},
+        { title: regex },
+        { slug: stringSlugRegex },
       ],
     })
+
     for (const item of songs) {
       const singer = await Singer.findOne({
         _id: item.singerId,
       });
-      item["singer"] = singer;
+      searchSongs.push({
+        id: item._id,
+        title: item.title,
+        slug: item.slug,
+        avatar: item.avatar,
+        like: item.like,
+        singer: {
+          fullName: singer.fullName,
+        },
+      });
+      // item["singer"] = singer;
     }
-    searchSongs = songs;
+    // searchSongs = songs;
   }
-
-  res.render("client/pages/search/result", {
-    pageTitle: `Kết quả tìm kiếm từ: ${keyword}`,
-    songs: searchSongs,
-    keyword: keyword,
-  });
+  switch (type) {
+    case "result":
+      res.render("client/pages/search/result", {
+        pageTitle: `Kết quả tìm kiếm từ: ${keyword}`,
+        songs: searchSongs,
+        keyword: keyword,
+      });
+      break;
+    case "suggest":
+      res.json({
+        status: 200,
+        message: "success",
+        songs: searchSongs,
+      });
+      break;
+    default:
+      break;
+  }
 };
+

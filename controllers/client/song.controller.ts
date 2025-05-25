@@ -39,7 +39,7 @@ export const list = async (req: Request, res: Response) => {
 
 // [GET] /songs/detail/:slugSong
 export const detail = async (req: Request, res: Response) => {
-  const slugSong = req.params.slugSong;
+  const slugSong:String = req.params.slugSong;
 
   const song = await Song.findOne({
     slug: slugSong,
