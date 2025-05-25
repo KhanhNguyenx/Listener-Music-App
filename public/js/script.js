@@ -35,11 +35,8 @@ if (aplayer) {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.code == "success") {
-          document.querySelector(
-            ".singer-detail .inner-listen span"
-          ).innerHTML = data.listen;
-        }
+       const listenSpan = document.querySelector(".singer-detail .inner-listen span");
+       listenSpan.innerHTML = `${data.listen.listen}`;
       });
   });
 }

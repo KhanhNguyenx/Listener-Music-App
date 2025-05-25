@@ -39,7 +39,7 @@ export const list = async (req: Request, res: Response) => {
 
 // [GET] /songs/detail/:slugSong
 export const detail = async (req: Request, res: Response) => {
-  const slugSong:String = req.params.slugSong;
+  const slugSong: String = req.params.slugSong;
 
   const song = await Song.findOne({
     slug: slugSong,
@@ -131,5 +131,33 @@ export const favorite = async (req: Request, res: Response) => {
   res.json({
     code: 200,
     message: "Thích bài hát thành công",
+  });
+}
+// [PATCH] /songs/listen/:idSong
+export const listen = async (req: Request, res: Response) => {
+  const idSong: String = req.params.idSong;
+
+  const song = await Song.findOne({
+    _id: idSong,
+  });
+  if (!song) {
+    return res.status(404).json({
+      message: "Bài hát không tồn tại"
+    });
+  }
+  const newListen: Number = song.listen + 1;
+  await Song.updateOne(
+    { _id: idSong },
+    { listen: newListen }
+  );
+  
+  const songNew = await Song.findOne({
+    _id: idSong,
+  }).select("listen");
+
+  res.json({
+    code: 200,
+    message: "Nghe bài hát thành công",
+    listen: songNew
   });
 }
