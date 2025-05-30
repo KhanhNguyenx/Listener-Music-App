@@ -17,6 +17,7 @@ block main
           name="title"
           required
         )
+
       div(class="form-group")
         label(for="topic") Chủ đề
         select(
@@ -28,6 +29,7 @@ block main
           option(value="" disabled selected) -- Chọn chủ đề --
           each item in topics
             option(value=item.id) #{item.title}
+
       div(class="form-group")
         label(for="singer") Ca sĩ
         select(
@@ -39,6 +41,7 @@ block main
           option(value="" disabled selected) -- Chọn ca sĩ --
           each item in singers
             option(value=item.id) #{item.fullName}
+
       div(
         class="form-group"
         upload-image
@@ -57,6 +60,7 @@ block main
           class="image-preview"
           upload-image-preview
         )
+
       div(
         class="form-group"
         upload-audio
@@ -72,6 +76,7 @@ block main
         )
         audio(controls upload-audio-play)
           source(src="")
+
       div(class="form-group")
         label(for="lyrics") Lời bài hát
         textarea(
@@ -83,6 +88,7 @@ block main
           [00:02.00] Lời bài hát từ giây thứ 2
           [00:04.00] Lời bài hát từ giây thứ 4
           [00:06.00] Lời bài hát từ giây thứ 6
+
       div(class="form-group")
         label(for="desc") Mô tả
         textarea(
@@ -93,6 +99,7 @@ block main
           rows="5"
           textarea-mce
         )
+
       div(class="form-group form-check form-check-inline")
         input(
           type="radio"
@@ -103,6 +110,7 @@ block main
           checked
         )
         label(for="statusActive" class="form-check-label") Hoạt động
+
       div(class="form-group form-check form-check-inline")
         input(
           type="radio"
@@ -112,6 +120,7 @@ block main
           value="inactive"
         )
         label(for="statusInActive" class="form-check-label") Dừng hoạt động
+        
       div(class="form-group")
         button(
           type="submit"
