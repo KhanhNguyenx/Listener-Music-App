@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import * as path from "path";
+import methodOverrite from "method-override";
 import * as database from "./config/database";
 import clientRoutes from "./routers/client/index.route";
 import adminRoutes from "./routers/admin/index.route";
@@ -17,6 +18,8 @@ app.use(express.static("public"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(methodOverrite("_method"));
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
