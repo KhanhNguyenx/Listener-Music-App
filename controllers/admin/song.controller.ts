@@ -49,9 +49,9 @@ export const createPost = async (req: Request, res: Response) => {
     avatar: avatar,
     audio: audio,
     status: req.body.status,
+    lyrics: req.body.lyrics,
   }
   const song = new Song(dataSong);
-  console.log(song);
   await song.save();
   res.redirect(`/${systemConfig.prefixAdmin}/songs`);
 };
