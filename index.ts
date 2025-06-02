@@ -14,14 +14,14 @@ database.connect();
 const app: Express = express();
 const port: number | string  = process.env.PORT || 3000;
 
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(methodOverrite("_method"));
 
-app.set("views", path.join(__dirname, "views"));
+app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
 
 //TinyMCE Configuration
